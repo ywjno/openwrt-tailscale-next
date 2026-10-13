@@ -1,0 +1,303 @@
+#!/bin/sh /etc/rc.common
+
+START=95
+USE_PROCD=1
+
+# Self-contained service: owns the tailscaled daemon AND the `tailscale up`
+# config applier. Missing binaries (fresh install, post-sysupgrade) are
+# bootstrapped by the updater on first start.
+
+TAILSCALE_BIN="${TAILSCALE_BIN:-/usr/sbin/tailscaled}"
+TAILSCALE="${TAILSCALE:-/usr/sbin/tailscale}"
+UPDATER="${UPDATER:-/usr/libexec/tailscale-next-update}"
+# daemon state dir (login state) and updater conf/backup dir
+CONFDIR="${TS_CONFDIR:-/etc/tailscale}"
+CRONTAB_FILE="${CRONTAB_FILE:-/etc/crontabs/root}"
+CRON_INITD="${CRON_INITD:-/etc/init.d/cron}"
+# the up instance re-enters this script through the "up" action (see up())
+INITD_SELF="${INITD_SELF:-/etc/init.d/tailscale-next}"
+extra_command up "wait for the daemon, then apply preferences (procd instance)"
+
+# procd starts instances asynchronously; `tailscale up` must wait for the
+# daemon socket or it races tailscaled startup (seconds, bounded).
+SOCKET_WAIT="${SOCKET_WAIT:-10}"
+# serialize start/stop/restart: overlapping invocations spawn overlapping
+# UPX-decompressed tailscaled instances, which OOM-kills 128-256MB routers
+SERVICE_LOCK="${SERVICE_LOCK:-/tmp/tailscale-next-service.lock}"
+# the page's "Start login" drops this file and restarts the service, which
+# then starts the one-shot `tailscale up` instance on demand
+LOGIN_TRIGGER="${LOGIN_TRIGGER:-/tmp/tailscale-next-login.request}"
+
+CRON_TAG="# tailscale-next-auto-update"
+
+get_config() {
+	config_get_bool enabled $1 enabled 0
+	config_get_bool acceptRoutes $1 acceptRoutes 0
+	config_get autoUpdate $1 autoUpdate 0
+	config_get loginServer $1 loginServer ""
+	config_get authkey $1 authkey ""
+	config_get checkOnLoad $1 checkOnLoad 0
+	config_get keepBackups $1 keepBackups 3
+	config_get advertiseExitNode $1 advertiseExitNode 0
+	config_get exitNode $1 exitNode ""
+	config_get exitNodeAllowLan $1 exitNodeAllowLan 0
+	config_get hostname $1 hostname ""
+	config_get advertiseRoutes $1 advertiseRoutes ""
+}
+
+cron_sync() { # $1=want(0/1)
+	_want="$1"
+	_line="TS_KEEP_BACKUPS=$keepBackups 30 4 * * * /usr/libexec/tailscale-next-update --yes >>/tmp/tailscale-next-update.log 2>&1 $CRON_TAG"
+	touch "$CRONTAB_FILE" 2>/dev/null || return 0
+	# already in the wanted state (tag present with the same backup value)?
+	# skip the rewrite and the cron restart
+	if grep -q "$CRON_TAG" "$CRONTAB_FILE" 2>/dev/null; then
+		if [ "$_want" = 1 ] && grep -q "TS_KEEP_BACKUPS=$keepBackups " "$CRONTAB_FILE" 2>/dev/null; then
+			return 0
+		fi
+	else
+		[ "$_want" != 1 ] && return 0
+	fi
+	_tmp="${CRONTAB_FILE}.tmp"
+	grep -v "$CRON_TAG" "$CRONTAB_FILE" 2>/dev/null > "$_tmp"
+	if [ "$_want" = 1 ]; then
+		echo "$_line" >> "$_tmp"
+	fi
+	cat "$_tmp" > "$CRONTAB_FILE"
+	rm -f "$_tmp"
+	[ -x "$CRON_INITD" ] && "$CRON_INITD" enabled && "$CRON_INITD" restart
+	return 0
+}
+
+ensure_binary() { # bootstrap the binaries via the updater when missing
+	if [ -x "$TAILSCALE_BIN" ]; then return 0; fi
+	if [ -n "${TSN_BOOTSTRAPPING:-}" ]; then return 1; fi
+	logger -t tailscale-next "tailscaled missing, bootstrapping via $UPDATER"
+	TSN_BOOTSTRAPPING=1 TS_KEEP_BACKUPS="$keepBackups" "$UPDATER" --yes >>/tmp/tailscale-next-update.log 2>&1 || true
+	[ -x "$TAILSCALE_BIN" ]
+}
+
+wait_for_socket() {
+	# phase 1: wait for the socket FILE to appear (cheap - no process spawn)
+	_i=0
+	while [ "$_i" -lt "$SOCKET_WAIT" ]; do
+		[ -S /var/run/tailscale/tailscaled.sock ] && break
+		_i=$((_i + 1))
+		sleep 1
+	done
+	if [ ! -S /var/run/tailscale/tailscaled.sock ]; then
+		logger -t tailscale-next "daemon socket not ready after ${SOCKET_WAIT}s; applying config anyway"
+		return 0
+	fi
+	# phase 2: the socket can predate the API answering and up would fail;
+	# probe sparingly (each probe spawns the CLI)
+	_i=0
+	while [ "$_i" -lt 3 ]; do
+		if [ -x "$TAILSCALE" ] && "$TAILSCALE" status --json >/dev/null 2>&1; then
+			return 0
+		fi
+		_i=$((_i + 1))
+		sleep 1
+	done
+	logger -t tailscale-next "daemon API not ready after socket wait; applying config anyway"
+	return 0
+}
+
+# Mutual exclusion for start/stop/restart. The lock dir records the pid of
+# the invocation holding it:
+#   - holder gone (crashed or killed)       -> stale, taken over at once
+#   - holder alive                          -> a normal restart holds the lock
+#     for a few seconds: wait briefly, then give up WITHOUT side effects
+#   - lock without a pid (older script)     -> judged by age, stale after 3 min
+# Re-entrant within one rc.common process (restart = stop+start).
+LOCK_WAIT="${LOCK_WAIT:-5}"
+
+# release on every exit path, including a killed invocation
+lock_traps() {
+	trap 'service_unlock' EXIT
+	trap 'exit 1' INT TERM HUP
+}
+
+lock_acquire() {
+	mkdir "$SERVICE_LOCK" 2>/dev/null || return 1
+	_TSN_LOCKED=1
+	echo $$ > "$SERVICE_LOCK/pid"
+	lock_traps
+	return 0
+}
+
+lock_holder_alive() {
+	_h="$(cat "$SERVICE_LOCK/pid" 2>/dev/null)"
+	[ -n "$_h" ] || return 0
+	kill -0 "$_h" 2>/dev/null
+}
+
+service_lock() {
+	[ "${_TSN_LOCKED:-}" = 1 ] && return 0
+	lock_acquire && return 0
+	_i=0
+	while [ "$_i" -le "$LOCK_WAIT" ]; do
+		lock_holder_alive || break
+		lock_acquire && return 0
+		[ "$_i" -lt "$LOCK_WAIT" ] || break
+		_i=$((_i + 1))
+		sleep 1
+	done
+	if ! lock_holder_alive || { [ ! -s "$SERVICE_LOCK/pid" ] && [ -z "$(find "$SERVICE_LOCK" -mmin +3 2>/dev/null)" ]; }; then
+		logger -t tailscale-next "taking over stale service lock"
+		rm -rf "$SERVICE_LOCK"
+		lock_acquire && return 0
+		return 1
+	fi
+	logger -t tailscale-next "another start/stop/restart in progress; skipping"
+	return 1
+}
+
+service_unlock() {
+	[ "${_TSN_LOCKED:-}" = 1 ] || return 0
+	_TSN_LOCKED=0
+	rm -rf "$SERVICE_LOCK" 2>/dev/null
+	return 0
+}
+
+start_service() {
+	logger -t tailscale-next 'start_service'
+	if ! service_lock; then
+		# rc.common commits the instance set even when we gave up: skip it
+		procd_close_service() { :; }
+		return 1
+	fi
+	config_load tailscale-next
+	config_foreach get_config settings
+	if [ "$enabled" != 1 ]; then
+		stop_service
+		service_unlock
+		return 1
+	fi
+	ensure_binary || { logger -t tailscale-next 'no tailscaled binary and bootstrap failed'; service_unlock; return 1; }
+
+	# procd spawns the daemon only after start_service returns: nothing to
+	# wait for here; the up instance waits for the socket itself
+	"$TAILSCALE_BIN" --cleanup --statedir="$CONFDIR" >/dev/null 2>&1 || true
+	procd_open_instance daemon
+	# the default statedir (/var/lib/tailscale) lives on /tmp (tmpfs):
+	# wiped on every reboot, so pin the login state to CONFDIR
+	procd_set_param command "$TAILSCALE_BIN" --statedir="$CONFDIR"
+	# 30s between respawns: right after an OOM the box is still tight, and an
+	# immediate restart re-pays the UPX decompress and dies again
+	procd_set_param respawn 3600 30 5
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_close_instance
+
+	# applier instance (one-shot), always declared: the up action waits for
+	# the daemon and checks state itself - probing here races the spawn
+	procd_open_instance up
+	procd_set_param command "$INITD_SELF" up
+	procd_set_param stdout 1
+	procd_set_param stderr 1
+	procd_close_instance
+
+	cron_sync "$autoUpdate"
+	service_unlock
+}
+
+# procd entry point of the "up" instance: wait for the daemon, then apply
+# the configured preferences. It runs as its own rc.common process, so the
+# config is read again instead of reusing start_service state.
+up() {
+	config_load tailscale-next
+	config_foreach get_config settings
+
+	# the page's "Start login" drops the trigger to force a login flow even
+	# when unauthenticated; consume it here
+	_login_requested=0
+	[ -f "$LOGIN_TRIGGER" ] && _login_requested=1
+	rm -f "$LOGIN_TRIGGER"
+
+	wait_for_socket
+
+	# apply prefs only when authenticated (an unattended up blocks forever
+	# on unauthenticated nodes); retry: the daemon may still be booting here
+	if [ "$_login_requested" != 1 ] && [ -z "$authkey" ]; then
+		_state=""
+		_i=0
+		while [ "$_i" -le "$SOCKET_WAIT" ]; do
+			_state="$("$TAILSCALE" status --json 2>/dev/null | sed -n 's/.*"BackendState": *"\([A-Za-z]*\)".*/\1/p' | head -n1)"
+			[ -n "$_state" ] && break
+			[ "$_i" -lt "$SOCKET_WAIT" ] || break
+			_i=$((_i + 1))
+			sleep 1
+		done
+		case "$_state" in
+			Running|Stopped|Starting) : ;;
+			*)
+				logger -t tailscale-next "node not authenticated and no authkey; skipping 'tailscale up' (use Start login on the page)"
+				exit 0
+				;;
+		esac
+	fi
+
+	set -- up --reset
+	[ -n "$loginServer" ] && set -- "$@" --login-server "$loginServer"
+	[ -n "$authkey" ] && set -- "$@" --authkey "$authkey"
+	[ -n "$hostname" ] && set -- "$@" --hostname "$hostname"
+	[ "$acceptRoutes" = 1 ] && set -- "$@" --accept-routes
+	[ -n "$advertiseRoutes" ] && set -- "$@" --advertise-routes "$advertiseRoutes"
+	if [ "$advertiseExitNode" = 1 ]; then
+		set -- "$@" --advertise-exit-node
+		# tailscale refuses to advertise an exit node without IP forwarding
+		if [ "$(sysctl -n net.ipv4.ip_forward 2>/dev/null)" != "1" ]; then
+			logger -t tailscale-next "WARNING: advertise-exit-node set but net.ipv4.ip_forward is off"
+		fi
+	fi
+	# up cannot resolve an exit node by NAME until connected: apply names
+	# once Running; IP literals go into the up command
+	_exit_later=""
+	case "$exitNode" in
+		'') ;;
+		*[!0-9.:]*) _exit_later="$exitNode" ;;
+	esac
+	if [ -n "$exitNode" ] && [ -z "$_exit_later" ]; then
+		set -- "$@" --exit-node "$exitNode"
+		[ "$exitNodeAllowLan" = 1 ] && set -- "$@" --exit-node-allow-lan-access
+	fi
+	set -- "$@" --accept-dns=false
+	"$TAILSCALE" "$@"
+	if [ -n "$_exit_later" ]; then
+		_i=0
+		while [ "$_i" -lt 60 ]; do
+			if "$TAILSCALE" status --json 2>/dev/null | grep -q '"BackendState": *"Running"'; then
+				set -- set --exit-node "$_exit_later"
+				[ "$exitNodeAllowLan" = 1 ] && set -- "$@" --exit-node-allow-lan-access
+				exec "$TAILSCALE" "$@"
+			fi
+			_i=$((_i + 2))
+			sleep 2
+		done
+		logger -t tailscale-next "WARNING: exit node not applied - node did not reach Running in 120s"
+	fi
+}
+
+restart() {
+	# the page drops the trigger right before restarting; default stop+start
+	# would delete it first, so preserve it across this stop
+	TSN_KEEP_TRIGGER=1
+	stop
+	start
+}
+
+stop_service() {
+	if ! service_lock; then
+		# rc.common runs procd_kill right after stop_service whatever we
+		# return: defuse it, or an overlapping restart kills the daemon and
+		# leaves the service down
+		procd_kill() { :; }
+		return 0
+	fi
+	# a plain stop cancels a pending login; a restart (see above) keeps it
+	[ "${TSN_KEEP_TRIGGER:-0}" = 1 ] || rm -f "$LOGIN_TRIGGER"
+	"$TAILSCALE_BIN" --cleanup --statedir="$CONFDIR" >/dev/null 2>&1 || true
+	cron_sync 0
+	service_unlock
+}

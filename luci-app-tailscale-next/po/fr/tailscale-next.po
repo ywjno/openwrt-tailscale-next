@@ -1,0 +1,271 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-tailscale-next\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "(waiting for log...)"
+msgstr "(en attente du journal...)"
+
+msgid "Accept subnet routes"
+msgstr "Accepter les routes de sous-réseau"
+
+msgid "Advertise as exit node"
+msgstr "Annoncer comme nœud de sortie"
+
+msgid "Advertise routes"
+msgstr "Annoncer les routes"
+
+msgid "Advertise routes must be a comma-separated list of IP subnets (e.g. 10.0.0.0/24)"
+msgstr "Les routes à annoncer doivent être une liste de sous-réseaux IP séparés par des virgules (ex. 10.0.0.0/24)"
+
+msgid "Allow LAN access while using an exit node"
+msgstr "Autoriser l'accès LAN lors de l'utilisation d'un nœud de sortie"
+
+msgid "Architecture"
+msgstr "Architecture"
+
+msgid "Auth key"
+msgstr "Clé d authentification"
+
+msgid "Auth key, leave empty to disable"
+msgstr "Clé d authentification, vide pour désactiver"
+
+msgid "Authenticate"
+msgstr "Authentifier"
+
+msgid "Auto update"
+msgstr "Mise à jour automatique"
+
+msgid "Backups to keep"
+msgstr "Sauvegardes à conserver"
+
+msgid "Bound user"
+msgstr "Utilisateur lié"
+
+msgid "Check for and install updates automatically every day at 04:30"
+msgstr "Rechercher et installer les mises à jour automatiquement chaque jour à 04h30"
+
+msgid "Check for updates"
+msgstr "Rechercher des mises à jour"
+
+msgid "Check for updates whenever this page is loaded."
+msgstr "Rechercher des mises à jour chaque fois que cette page est chargée."
+
+msgid "Check timed out, please try again"
+msgstr "La vérification a expiré, veuillez réessayer"
+
+msgid "Checking for updates..."
+msgstr "Recherche de mises à jour..."
+
+msgid "Custom Server"
+msgstr "Serveur personnalisé"
+
+msgid "Device requirements"
+msgstr "Configuration requise de l'appareil"
+
+msgid "Enable"
+msgstr "Activer"
+
+msgid "Enable \"Check for updates\" above to check automatically."
+msgstr "Activez « Vérifier les mises à jour » (ci-dessus) pour vérifier automatiquement."
+
+msgid "Enable the service above to show the settings."
+msgstr "Activez le service ci-dessus pour afficher les paramètres."
+
+msgid "Exit node must be a Tailscale IP or node name, not a subnet (e.g. 100.64.0.1 or my-exit-node)"
+msgstr "Le noeud de sortie doit être une IP Tailscale ou un nom de noeud, pas un sous-réseau (p. ex. 100.64.0.1 ou my-exit-node)"
+
+msgid "Exit node name or IP; leave empty to disable"
+msgstr "Nom ou IP du nœud de sortie ; laisser vide pour désactiver"
+
+msgid "Exit node that routes traffic for this device: Tailscale IP (100.x.x.x) or node name, not a subnet. Leave empty to disable."
+msgstr "Noeud de sortie pour le trafic de cet appareil : IP Tailscale (100.x.x.x) ou nom de noeud, pas un sous-réseau. Vide pour désactiver."
+
+msgid "Failed to read status: %s"
+msgstr "Échec de la lecture de l état : %s"
+
+msgid "For details see"
+msgstr "Pour plus de détails, voir"
+
+msgid "Global Settings"
+msgstr "Paramètres globaux"
+
+msgid "Headscale server URL, leave empty to disable"
+msgstr "URL du serveur Headscale, vide pour désactiver"
+
+msgid "Hostname"
+msgstr "Nom d hôte"
+
+msgid "IP addresses, comma separated"
+msgstr "Adresses IP, séparées par des virgules"
+
+msgid "Installed version"
+msgstr "Version installée"
+
+msgid "Latest version"
+msgstr "Dernière version"
+
+msgid "Leave empty to use the device hostname"
+msgstr "Laisser vide pour utiliser le nom de l appareil"
+
+msgid "Let other tailnet devices route their internet traffic through this router; approve the exit node in the Tailscale admin console."
+msgstr "Laisse les autres appareils du tailnet router leur trafic internet via ce routeur ; approuvez le nœud de sortie dans la console d'administration Tailscale."
+
+msgid "Loading status..."
+msgstr "Chargement de l'état..."
+
+msgid "Log"
+msgstr "Journal"
+
+msgid "Log out and unbind"
+msgstr "Se déconnecter et dissocier"
+
+msgid "Log out and unbind the current device?"
+msgstr "Se déconnecter et dissocier cet appareil ?"
+
+msgid "Login"
+msgstr "Connexion"
+
+msgid "Low"
+msgstr "Faible"
+
+msgid "Memory"
+msgstr "Mémoire"
+
+msgid "Needs login"
+msgstr "Connexion requise"
+
+msgid "Needs machine auth"
+msgstr "Autorisation de la machine requise"
+
+msgid "No backup available on this device."
+msgstr "Aucune sauvegarde disponible sur cet appareil."
+
+msgid "No log output yet. Start response: %s"
+msgstr "Pas encore de sortie de journal. Réponse de démarrage : %s"
+
+msgid "Node"
+msgstr "Nœud"
+
+msgid "Not running"
+msgstr "Non actif"
+
+msgid "Number of update backups kept on this device (0 disables backups)."
+msgstr "Nombre de sauvegardes de mises à jour conservées sur cet appareil (0 désactive les sauvegardes)."
+
+msgid "One click replaces the tailscale/tailscaled binaries with the latest upstream release; init scripts, UCI config and login state are preserved."
+msgstr "Un clic remplace les binaires tailscale/tailscaled par la dernière version amont ; les scripts init, la configuration UCI et l'état de connexion sont préservés."
+
+msgid "Requirements: RAM 128 MB minimum (256 MB recommended), 10 MB free on /overlay (37 MB with update backups), 30 MB free on /tmp for automatic updates."
+msgstr "Prérequis : 128 Mo de RAM minimum (256 Mo recommandé), 10 Mo libres sur /overlay (37 Mo avec les sauvegardes de mises à jour), 30 Mo libres sur /tmp pour les mises à jour automatiques."
+
+msgid "Roll back"
+msgstr "Restaurer"
+
+msgid "Roll back to the last backed-up Tailscale version?"
+msgstr "Restaurer la dernière version sauvegardée de Tailscale ?"
+
+msgid "Running"
+msgstr "En cours"
+
+msgid "Save failed: %s"
+msgstr "Échec de l enregistrement : %s"
+
+msgid "Server URL"
+msgstr "URL du serveur"
+
+msgid "Server URL must start with http:// or https://"
+msgstr "L'URL du serveur doit commencer par http:// ou https://"
+
+msgid "Start login"
+msgstr "Démarrer la connexion"
+
+msgid "Starting..."
+msgstr "Démarrage..."
+
+msgid "State"
+msgstr "État"
+
+msgid "Status"
+msgstr "Statut"
+
+msgid "Stopped"
+msgstr "Arrêté"
+
+msgid "Storage (/)"
+msgstr "Stockage (/)"
+
+msgid "Storage (/tmp)"
+msgstr "Stockage (/tmp)"
+
+msgid "Subnets allowed to be accessed:"
+msgstr "Sous-réseaux autorisés : "
+
+msgid "Tailscale"
+msgstr "Tailscale"
+
+msgid "Tailscale Update"
+msgstr "Mise à jour Tailscale"
+
+msgid "Tailscale connects your devices for easy access to remote resources."
+msgstr "Tailscale connecte vos appareils pour un accès facile aux ressources distantes."
+
+msgid "Tailscale update completed."
+msgstr "Mise à jour Tailscale terminée."
+
+msgid "The update seems stuck, see the log below."
+msgstr "La mise à jour semble bloquée, voir le journal ci-dessous."
+
+msgid "Too low"
+msgstr "Trop faible"
+msgid "Up to date"
+msgstr "À jour"
+
+msgid "Update Settings"
+msgstr "Paramètres de mise à jour"
+
+msgid "Update available"
+msgstr "Mise à jour disponible"
+
+msgid "Update failed, see the log below."
+msgstr "Échec de la mise à jour, voir le journal ci-dessous."
+
+msgid "Update failed, see the log below."
+msgstr "Échec de la mise à jour, voir le journal ci-dessous."
+
+msgid "Update skipped: another update is already running."
+msgstr "Mise à jour ignorée : une autre mise à jour est déjà en cours."
+
+msgid "Update started, reading progress..."
+msgstr "Mise à jour démarrée, lecture de la progression..."
+
+msgid "Update to latest now"
+msgstr "Mettre à jour maintenant"
+
+msgid "Use"
+msgstr "Utilisez"
+
+msgid "Use exit node"
+msgstr "Utiliser un nœud de sortie"
+
+msgid "e.g. OpenWrt"
+msgstr "par ex. OpenWrt"
+
+msgid "free"
+msgstr "libre"
+
+msgid "no output"
+msgstr "aucune sortie"
+
+msgid "not installed"
+msgstr "non installé"
+
+msgid "ok"
+msgstr "OK"
+
+msgid "tailscale-next config section not found"
+msgstr "Section de configuration tailscale-next introuvable"
+
+msgid "to deploy a private server"
+msgstr "pour déployer un serveur privé"

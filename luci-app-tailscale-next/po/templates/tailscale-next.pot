@@ -1,0 +1,271 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-tailscale-next\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "(waiting for log...)"
+msgstr ""
+
+msgid "Accept subnet routes"
+msgstr ""
+
+msgid "Advertise as exit node"
+msgstr ""
+
+msgid "Advertise routes"
+msgstr ""
+
+msgid "Advertise routes must be a comma-separated list of IP subnets (e.g. 10.0.0.0/24)"
+msgstr ""
+
+msgid "Allow LAN access while using an exit node"
+msgstr ""
+
+msgid "Architecture"
+msgstr ""
+
+msgid "Auth key"
+msgstr ""
+
+msgid "Auth key, leave empty to disable"
+msgstr ""
+
+msgid "Authenticate"
+msgstr ""
+
+msgid "Auto update"
+msgstr ""
+
+msgid "Backups to keep"
+msgstr ""
+
+msgid "Bound user"
+msgstr ""
+
+msgid "Check for and install updates automatically every day at 04:30"
+msgstr ""
+
+msgid "Check for updates"
+msgstr ""
+
+msgid "Check for updates whenever this page is loaded."
+msgstr ""
+
+msgid "Check timed out, please try again"
+msgstr ""
+
+msgid "Checking for updates..."
+msgstr ""
+
+msgid "Custom Server"
+msgstr ""
+
+msgid "Device requirements"
+msgstr ""
+
+msgid "Enable"
+msgstr ""
+
+msgid "Enable \"Check for updates\" above to check automatically."
+msgstr ""
+
+msgid "Enable the service above to show the settings."
+msgstr ""
+
+msgid "Exit node must be a Tailscale IP or node name, not a subnet (e.g. 100.64.0.1 or my-exit-node)"
+msgstr ""
+
+msgid "Exit node name or IP; leave empty to disable"
+msgstr ""
+
+msgid "Exit node that routes traffic for this device: Tailscale IP (100.x.x.x) or node name, not a subnet. Leave empty to disable."
+msgstr ""
+
+msgid "Failed to read status: %s"
+msgstr ""
+
+msgid "For details see"
+msgstr ""
+
+msgid "Global Settings"
+msgstr ""
+
+msgid "Headscale server URL, leave empty to disable"
+msgstr ""
+
+msgid "Hostname"
+msgstr ""
+
+msgid "IP addresses, comma separated"
+msgstr ""
+
+msgid "Installed version"
+msgstr ""
+
+msgid "Latest version"
+msgstr ""
+
+msgid "Leave empty to use the device hostname"
+msgstr ""
+
+msgid "Let other tailnet devices route their internet traffic through this router; approve the exit node in the Tailscale admin console."
+msgstr ""
+
+msgid "Loading status..."
+msgstr ""
+
+msgid "Log"
+msgstr ""
+
+msgid "Log out and unbind"
+msgstr ""
+
+msgid "Log out and unbind the current device?"
+msgstr ""
+
+msgid "Login"
+msgstr ""
+
+msgid "Low"
+msgstr ""
+
+msgid "Memory"
+msgstr ""
+
+msgid "Needs login"
+msgstr ""
+
+msgid "Needs machine auth"
+msgstr ""
+
+msgid "No backup available on this device."
+msgstr ""
+
+msgid "No log output yet. Start response: %s"
+msgstr ""
+
+msgid "Node"
+msgstr ""
+
+msgid "Not running"
+msgstr ""
+
+msgid "Number of update backups kept on this device (0 disables backups)."
+msgstr ""
+
+msgid "One click replaces the tailscale/tailscaled binaries with the latest upstream release; init scripts, UCI config and login state are preserved."
+msgstr ""
+
+msgid "Requirements: RAM 128 MB minimum (256 MB recommended), 10 MB free on /overlay (37 MB with update backups), 30 MB free on /tmp for automatic updates."
+msgstr ""
+
+msgid "Roll back"
+msgstr ""
+
+msgid "Roll back to the last backed-up Tailscale version?"
+msgstr ""
+
+msgid "Running"
+msgstr ""
+
+msgid "Save failed: %s"
+msgstr ""
+
+msgid "Server URL"
+msgstr ""
+
+msgid "Server URL must start with http:// or https://"
+msgstr ""
+
+msgid "Start login"
+msgstr ""
+
+msgid "Starting..."
+msgstr ""
+
+msgid "State"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Stopped"
+msgstr ""
+
+msgid "Storage (/)"
+msgstr ""
+
+msgid "Storage (/tmp)"
+msgstr ""
+
+msgid "Subnets allowed to be accessed:"
+msgstr ""
+
+msgid "Tailscale"
+msgstr ""
+
+msgid "Tailscale Update"
+msgstr ""
+
+msgid "Tailscale connects your devices for easy access to remote resources."
+msgstr ""
+
+msgid "Tailscale update completed."
+msgstr ""
+
+msgid "The update seems stuck, see the log below."
+msgstr ""
+
+msgid "Too low"
+msgstr ""
+msgid "Up to date"
+msgstr ""
+
+msgid "Update Settings"
+msgstr ""
+
+msgid "Update available"
+msgstr ""
+
+msgid "Update failed, see the log below."
+msgstr ""
+
+msgid "Update failed, see the log below."
+msgstr ""
+
+msgid "Update skipped: another update is already running."
+msgstr ""
+
+msgid "Update started, reading progress..."
+msgstr ""
+
+msgid "Update to latest now"
+msgstr ""
+
+msgid "Use"
+msgstr ""
+
+msgid "Use exit node"
+msgstr ""
+
+msgid "e.g. OpenWrt"
+msgstr ""
+
+msgid "free"
+msgstr ""
+
+msgid "no output"
+msgstr ""
+
+msgid "not installed"
+msgstr ""
+
+msgid "ok"
+msgstr ""
+
+msgid "tailscale-next config section not found"
+msgstr ""
+
+msgid "to deploy a private server"
+msgstr ""

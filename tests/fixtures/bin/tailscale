@@ -1,0 +1,7 @@
+#!/bin/sh
+# Fake tailscale CLI v1.80.3 (fixture).
+case "$1" in
+	version) echo "1.80.3" ;;
+	status)  echo '# fake'; echo '100.64.0.1 fake-node linux -' ;;
+	*) exit 0 ;;
+esac

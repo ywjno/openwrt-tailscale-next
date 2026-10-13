@@ -1,0 +1,271 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-tailscale-next\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "(waiting for log...)"
+msgstr "（等待日誌…）"
+
+msgid "Accept subnet routes"
+msgstr "接受子網路由"
+
+msgid "Advertise as exit node"
+msgstr "作為出口節點提供"
+
+msgid "Advertise routes"
+msgstr "通告路由"
+
+msgid "Advertise routes must be a comma-separated list of IP subnets (e.g. 10.0.0.0/24)"
+msgstr "廣告路由必須是逗號分隔的 IP 子網清單（例如 10.0.0.0/24）"
+
+msgid "Allow LAN access while using an exit node"
+msgstr "使用出口節點時允許存取區域網路"
+
+msgid "Architecture"
+msgstr "架構"
+
+msgid "Auth key"
+msgstr "權杖"
+
+msgid "Auth key, leave empty to disable"
+msgstr "自訂權杖，留空則不使用"
+
+msgid "Authenticate"
+msgstr "驗證繫結"
+
+msgid "Auto update"
+msgstr "自動更新"
+
+msgid "Backups to keep"
+msgstr "保留備份數"
+
+msgid "Bound user"
+msgstr "已繫結使用者"
+
+msgid "Check for and install updates automatically every day at 04:30"
+msgstr "每天 04:30 自動檢查並安裝更新"
+
+msgid "Check for updates"
+msgstr "檢查更新"
+
+msgid "Check for updates whenever this page is loaded."
+msgstr "每次開啟本頁面時檢查更新。"
+
+msgid "Check timed out, please try again"
+msgstr "檢查逾時，請重試"
+
+msgid "Checking for updates..."
+msgstr "正在檢查更新…"
+
+msgid "Custom Server"
+msgstr "自訂伺服器"
+
+msgid "Device requirements"
+msgstr "設備需求"
+
+msgid "Enable"
+msgstr "啟用"
+
+msgid "Enable \"Check for updates\" above to check automatically."
+msgstr "勾選上方的「檢查更新」後，每次開啟本頁面都會自動檢查。"
+
+msgid "Enable the service above to show the settings."
+msgstr "勾選上方的啟用後顯示設定。"
+
+msgid "Exit node must be a Tailscale IP or node name, not a subnet (e.g. 100.64.0.1 or my-exit-node)"
+msgstr "出口節點必須填 Tailscale IP 或節點名稱，不能填網段（例如 100.64.0.1 或 my-exit-node）"
+
+msgid "Exit node name or IP; leave empty to disable"
+msgstr "出口節點名稱或 IP，留空停用"
+
+msgid "Exit node that routes traffic for this device: Tailscale IP (100.x.x.x) or node name, not a subnet. Leave empty to disable."
+msgstr "為這台裝置的流量選擇出口節點：填 Tailscale IP（100.x.x.x）或節點名稱，不能填網段。留空表示不使用。"
+
+msgid "Failed to read status: %s"
+msgstr "讀取狀態失敗：%s"
+
+msgid "For details see"
+msgstr "詳情請查看"
+
+msgid "Global Settings"
+msgstr "全域設定"
+
+msgid "Headscale server URL, leave empty to disable"
+msgstr "Headscale 伺服器位址，留空則停用"
+
+msgid "Hostname"
+msgstr "主機名稱"
+
+msgid "IP addresses, comma separated"
+msgstr "IP 位址，以逗號分隔"
+
+msgid "Installed version"
+msgstr "已安裝版本"
+
+msgid "Latest version"
+msgstr "最新版本"
+
+msgid "Leave empty to use the device hostname"
+msgstr "留空則使用裝置名稱"
+
+msgid "Let other tailnet devices route their internet traffic through this router; approve the exit node in the Tailscale admin console."
+msgstr "允許 tailnet 中其他裝置的網際網路流量經由本路由器轉發；需在 Tailscale 管理控制台批准出口節點。"
+
+msgid "Loading status..."
+msgstr "正在載入狀態..."
+
+msgid "Log"
+msgstr "日誌"
+
+msgid "Log out and unbind"
+msgstr "登出並解除繫結"
+
+msgid "Log out and unbind the current device?"
+msgstr "是否登出並解除繫結目前裝置？"
+
+msgid "Login"
+msgstr "登入"
+
+msgid "Low"
+msgstr "偏少"
+
+msgid "Memory"
+msgstr "記憶體"
+
+msgid "Needs login"
+msgstr "需要登入"
+
+msgid "Needs machine auth"
+msgstr "需要裝置授權"
+
+msgid "No backup available on this device."
+msgstr "本機沒有可用的備份。"
+
+msgid "No log output yet. Start response: %s"
+msgstr "尚無日誌輸出。啟動回應：%s"
+
+msgid "Node"
+msgstr "節點"
+
+msgid "Not running"
+msgstr "未在執行"
+
+msgid "Number of update backups kept on this device (0 disables backups)."
+msgstr "本設備保留的更新備份份數（0 表示不備份）。"
+
+msgid "One click replaces the tailscale/tailscaled binaries with the latest upstream release; init scripts, UCI config and login state are preserved."
+msgstr "一鍵將 tailscale/tailscaled 二進位更新為上游最新版本；init 腳本、UCI 設定和登入狀態均保留。"
+
+msgid "Requirements: RAM 128 MB minimum (256 MB recommended), 10 MB free on /overlay (37 MB with update backups), 30 MB free on /tmp for automatic updates."
+msgstr "需求：記憶體至少 128 MB（建議 256 MB），/overlay 至少 10 MB 可用（含更新備份約 37 MB），/tmp 至少 30 MB 可用以支援自動更新。"
+
+msgid "Roll back"
+msgstr "回滾"
+
+msgid "Roll back to the last backed-up Tailscale version?"
+msgstr "確定回滾到上一個備份的 Tailscale 版本嗎？"
+
+msgid "Running"
+msgstr "執行中"
+
+msgid "Save failed: %s"
+msgstr "儲存失敗：%s"
+
+msgid "Server URL"
+msgstr "伺服器位址"
+
+msgid "Server URL must start with http:// or https://"
+msgstr "伺服器位址必須以 http:// 或 https:// 開頭"
+
+msgid "Start login"
+msgstr "開始登入"
+
+msgid "Starting..."
+msgstr "正在啟動..."
+
+msgid "State"
+msgstr "狀態"
+
+msgid "Status"
+msgstr "狀態"
+
+msgid "Stopped"
+msgstr "已停止"
+
+msgid "Storage (/)"
+msgstr "儲存空間（/）"
+
+msgid "Storage (/tmp)"
+msgstr "儲存空間（/tmp）"
+
+msgid "Subnets allowed to be accessed:"
+msgstr "允許被存取的網段: "
+
+msgid "Tailscale"
+msgstr "Tailscale"
+
+msgid "Tailscale Update"
+msgstr "Tailscale 更新"
+
+msgid "Tailscale connects your devices for easy access to remote resources."
+msgstr "Tailscale 連接你的裝置，輕鬆存取遠端資源。"
+
+msgid "Tailscale update completed."
+msgstr "Tailscale 更新完成。"
+
+msgid "The update seems stuck, see the log below."
+msgstr "更新似乎卡住了，請查看下方日誌。"
+
+msgid "Too low"
+msgstr "不足"
+msgid "Up to date"
+msgstr "已是最新"
+
+msgid "Update Settings"
+msgstr "更新設定"
+
+msgid "Update available"
+msgstr "有可用更新"
+
+msgid "Update failed, see the log below."
+msgstr "更新失敗，請查看下方日誌。"
+
+msgid "Update failed, see the log below."
+msgstr "更新失敗，請查看下方日誌。"
+
+msgid "Update skipped: another update is already running."
+msgstr "已跳過更新：另一個更新正在進行中。"
+
+msgid "Update started, reading progress..."
+msgstr "更新已開始，正在讀取進度…"
+
+msgid "Update to latest now"
+msgstr "立即更新到最新版"
+
+msgid "Use"
+msgstr "使用"
+
+msgid "Use exit node"
+msgstr "使用出口節點"
+
+msgid "e.g. OpenWrt"
+msgstr "例如: OpenWrt"
+
+msgid "free"
+msgstr "可用"
+
+msgid "no output"
+msgstr "沒有輸出"
+
+msgid "not installed"
+msgstr "未安裝"
+
+msgid "ok"
+msgstr "正常"
+
+msgid "tailscale-next config section not found"
+msgstr "找不到 tailscale-next 設定段"
+
+msgid "to deploy a private server"
+msgstr "部署私有伺服器"

@@ -1,0 +1,13 @@
+config settings
+	option enabled '0'
+	option acceptRoutes '0'
+	option advertiseRoutes ''
+	option hostname ''
+	option loginServer ''
+	option authkey ''
+	option checkOnLoad '0'
+	option keepBackups '3'
+	option advertiseExitNode '0'
+	option exitNode ''
+	option exitNodeAllowLan '0'
+	option autoUpdate '0'

@@ -1,0 +1,271 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-tailscale-next\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "(waiting for log...)"
+msgstr "(ログ待ち...)"
+
+msgid "Accept subnet routes"
+msgstr "サブネットルートを受け入れる"
+
+msgid "Advertise as exit node"
+msgstr "エグジットノードとして公開"
+
+msgid "Advertise routes"
+msgstr "ルートを通知"
+
+msgid "Advertise routes must be a comma-separated list of IP subnets (e.g. 10.0.0.0/24)"
+msgstr "広告するルートはカンマ区切りのIPサブネットリストである必要があります（例: 10.0.0.0/24）"
+
+msgid "Allow LAN access while using an exit node"
+msgstr "エグジットノード使用中も LAN アクセスを許可"
+
+msgid "Architecture"
+msgstr "アーキテクチャ"
+
+msgid "Auth key"
+msgstr "認証キー"
+
+msgid "Auth key, leave empty to disable"
+msgstr "認証キー（空欄で無効）"
+
+msgid "Authenticate"
+msgstr "認証"
+
+msgid "Auto update"
+msgstr "自動更新"
+
+msgid "Backups to keep"
+msgstr "保持するバックアップ数"
+
+msgid "Bound user"
+msgstr "バインド済みユーザー"
+
+msgid "Check for and install updates automatically every day at 04:30"
+msgstr "毎日 04:30 に更新を自動で確認してインストールします"
+
+msgid "Check for updates"
+msgstr "更新を確認"
+
+msgid "Check for updates whenever this page is loaded."
+msgstr "このページが読み込まれるたびに更新を確認します。"
+
+msgid "Check timed out, please try again"
+msgstr "確認がタイムアウトしました。再試行してください"
+
+msgid "Checking for updates..."
+msgstr "更新を確認しています..."
+
+msgid "Custom Server"
+msgstr "カスタムサーバー"
+
+msgid "Device requirements"
+msgstr "デバイスの要件"
+
+msgid "Enable"
+msgstr "有効"
+
+msgid "Enable \"Check for updates\" above to check automatically."
+msgstr "上の「更新の確認」にチェックを入れると、ページを開いたときに自動で確認します。"
+
+msgid "Enable the service above to show the settings."
+msgstr "上のサービスを有効にすると設定が表示されます。"
+
+msgid "Exit node must be a Tailscale IP or node name, not a subnet (e.g. 100.64.0.1 or my-exit-node)"
+msgstr "出口ノードには Tailscale の IP またはノード名を指定してください。サブネットは指定できません（例: 100.64.0.1 や my-exit-node）"
+
+msgid "Exit node name or IP; leave empty to disable"
+msgstr "エグジットノードの名前または IP。空欄で無効"
+
+msgid "Exit node that routes traffic for this device: Tailscale IP (100.x.x.x) or node name, not a subnet. Leave empty to disable."
+msgstr "このデバイスのトラフィックを中継する出口ノード: Tailscale IP (100.x.x.x) またはノード名。サブネットは不可。空欄で無効。"
+
+msgid "Failed to read status: %s"
+msgstr "ステータスの読み取りに失敗しました: %s"
+
+msgid "For details see"
+msgstr "詳細は"
+
+msgid "Global Settings"
+msgstr "グローバル設定"
+
+msgid "Headscale server URL, leave empty to disable"
+msgstr "Headscale サーバー URL（空欄で無効）"
+
+msgid "Hostname"
+msgstr "ホスト명"
+
+msgid "IP addresses, comma separated"
+msgstr "IPアドレス（カンマ区切り）"
+
+msgid "Installed version"
+msgstr "インストール済みバージョン"
+
+msgid "Latest version"
+msgstr "最新バージョン"
+
+msgid "Leave empty to use the device hostname"
+msgstr "空欄の場合はデバイス名を使用します"
+
+msgid "Let other tailnet devices route their internet traffic through this router; approve the exit node in the Tailscale admin console."
+msgstr "他の tailnet デバイスのインターネット通信をこのルーター経由にします。Tailscale 管理コンソールでエグジットノードを承認してください。"
+
+msgid "Loading status..."
+msgstr "ステータスを読み込み中..."
+
+msgid "Log"
+msgstr "ログ"
+
+msgid "Log out and unbind"
+msgstr "ログアウトして解除"
+
+msgid "Log out and unbind the current device?"
+msgstr "ログアウトしてこのデバイスの紐付けを解除しますか？"
+
+msgid "Login"
+msgstr "ログイン"
+
+msgid "Low"
+msgstr "少ない"
+
+msgid "Memory"
+msgstr "メモリ"
+
+msgid "Needs login"
+msgstr "ログインが必要"
+
+msgid "Needs machine auth"
+msgstr "デバイスの承認が必要"
+
+msgid "No backup available on this device."
+msgstr "このデバイスには利用可能なバックアップがありません。"
+
+msgid "No log output yet. Start response: %s"
+msgstr "ログ出力はまだありません。開始応答: %s"
+
+msgid "Node"
+msgstr "ノード"
+
+msgid "Not running"
+msgstr "未実行"
+
+msgid "Number of update backups kept on this device (0 disables backups)."
+msgstr "このデバイスに保持する更新バックアップの数（0 でバックアップ無効）。"
+
+msgid "One click replaces the tailscale/tailscaled binaries with the latest upstream release; init scripts, UCI config and login state are preserved."
+msgstr "ワンクリックで tailscale/tailscaled バイナリを最新の上流リリースに置き換えます。init スクリプト、UCI 設定、ログイン状態は保持されます。"
+
+msgid "Requirements: RAM 128 MB minimum (256 MB recommended), 10 MB free on /overlay (37 MB with update backups), 30 MB free on /tmp for automatic updates."
+msgstr "要件: RAM 128 MB以上（256 MB推奨）、/overlayに10 MB以上の空き（更新バックアップがある場合は37 MB）、自動更新には/tmpに30 MB以上の空き。"
+
+msgid "Roll back"
+msgstr "ロールバック"
+
+msgid "Roll back to the last backed-up Tailscale version?"
+msgstr "最後にバックアップした Tailscale バージョンにロールバックしますか？"
+
+msgid "Running"
+msgstr "実行中"
+
+msgid "Save failed: %s"
+msgstr "保存に失敗しました: %s"
+
+msgid "Server URL"
+msgstr "サーバー URL"
+
+msgid "Server URL must start with http:// or https://"
+msgstr "サーバーURLは http:// または https:// で始まる必要があります"
+
+msgid "Start login"
+msgstr "ログインを開始"
+
+msgid "Starting..."
+msgstr "起動中..."
+
+msgid "State"
+msgstr "状態"
+
+msgid "Status"
+msgstr "状態"
+
+msgid "Stopped"
+msgstr "停止済み"
+
+msgid "Storage (/)"
+msgstr "ストレージ (/)"
+
+msgid "Storage (/tmp)"
+msgstr "ストレージ (/tmp)"
+
+msgid "Subnets allowed to be accessed:"
+msgstr "アクセスを許可するサブネット: "
+
+msgid "Tailscale"
+msgstr "Tailscale"
+
+msgid "Tailscale Update"
+msgstr "Tailscale 更新"
+
+msgid "Tailscale connects your devices for easy access to remote resources."
+msgstr "Tailscale はデバイス同士を接続し、リモートリソースへ簡単にアクセスできるようにします。"
+
+msgid "Tailscale update completed."
+msgstr "Tailscale の更新が完了しました。"
+
+msgid "The update seems stuck, see the log below."
+msgstr "更新が停止しているようです。下のログを確認してください。"
+
+msgid "Too low"
+msgstr "不足しています"
+msgid "Up to date"
+msgstr "最新です"
+
+msgid "Update Settings"
+msgstr "更新設定"
+
+msgid "Update available"
+msgstr "更新があります"
+
+msgid "Update failed, see the log below."
+msgstr "更新に失敗しました。下のログを確認してください。"
+
+msgid "Update failed, see the log below."
+msgstr "更新に失敗しました。下のログを確認してください。"
+
+msgid "Update skipped: another update is already running."
+msgstr "更新をスキップしました：別の更新がすでに実行中です。"
+
+msgid "Update started, reading progress..."
+msgstr "更新を開始しました。進行状況を読み取っています..."
+
+msgid "Update to latest now"
+msgstr "今すぐ最新版に更新"
+
+msgid "Use"
+msgstr "使用"
+
+msgid "Use exit node"
+msgstr "エグジットノードを使用"
+
+msgid "e.g. OpenWrt"
+msgstr "例: OpenWrt"
+
+msgid "free"
+msgstr "空き"
+
+msgid "no output"
+msgstr "出力がありません"
+
+msgid "not installed"
+msgstr "未インストール"
+
+msgid "ok"
+msgstr "OK"
+
+msgid "tailscale-next config section not found"
+msgstr "tailscale-next 設定セクションが見つかりません"
+
+msgid "to deploy a private server"
+msgstr "でプライベートサーバーを構築"

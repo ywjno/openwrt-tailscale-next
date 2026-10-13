@@ -1,0 +1,268 @@
+name: build OpenWrt packages
+
+# ipk via 24.10.5 SDK (opkg; OpenWrt 21.02-24.10), apk via 25.12.5 SDK (25.12+).
+# Official SDK containers: coherent default .config, prepared feeds, all deps.
+# APPEND selections to the shipped .config, then make defconfig + a
+# single-package compile; never overwrite the .config between defconfig and
+# make - it re-runs `conf --defconfig` every make, and an out-of-sync config
+# trips recursive-dependency errors (3h+ derails observed).
+# The 25.12 buildroot cannot sign packages; the release job signs the .apk
+# files afterwards with `apk adbsign` (alpine container) against the public
+# key committed at keys/tailscale-next.pem.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "package version"
+        required: true
+        default: "1.0.0"
+  push:
+    tags:
+      - "v*"
+
+# minimal at workflow level; only the release job opts into write
+permissions:
+  contents: read
+
+# serialize same-ref runs (e.g. two tags racing to create one release)
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PKG_NAME: luci-app-tailscale-next
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # cap runaway builds (see header note): normal runs are <30 min
+    timeout-minutes: 90
+    name: Build ${{ matrix.fmt }}
+    # both matrix legs write identical values - race harmless
+    outputs:
+      pkgver: ${{ steps.resolve.outputs.PKGVER }}
+      expected: ${{ steps.resolve.outputs.EXPECTED }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - fmt: ipk
+            image: ghcr.io/openwrt/sdk:x86-64-24.10.5
+          - fmt: apk
+            image: ghcr.io/openwrt/sdk:x86-64-25.12.5
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v5
+
+      # env indirection + charset check: never interpolate inputs into shell;
+      # tags may contain chars that break sed/artifact names (e.g. '/')
+      - name: Resolve version
+        id: resolve
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "push" ]; then
+            v="${GITHUB_REF_NAME#v}"
+          else
+            v="$VERSION"
+          fi
+          case "$v" in
+            *[!A-Za-z0-9._-]*|'') echo "ERROR: invalid package version: '$v'" >&2; exit 1 ;;
+          esac
+          n_langs=$(find "${PKG_NAME}/po" -mindepth 1 -maxdepth 1 -type d ! -name templates | wc -l)
+          [ "$n_langs" -gt 0 ] || { echo "ERROR: no languages under ${PKG_NAME}/po/" >&2; exit 1; }
+          # GITHUB_ENV feeds later steps of this job, GITHUB_OUTPUT feeds the release job
+          echo "PKGVER=$v" >> "$GITHUB_ENV"
+          echo "EXPECTED=$((n_langs + 1))" >> "$GITHUB_ENV"
+          echo "PKGVER=$v" >> "$GITHUB_OUTPUT"
+          echo "EXPECTED=$((n_langs + 1))" >> "$GITHUB_OUTPUT"
+
+      - name: Write version into Makefile
+        run: sed -i "s/^PKG_VERSION:=.*/PKG_VERSION:=${PKGVER}/" "${PKG_NAME}/Makefile"
+
+      - name: Verify executable bits
+        run: |
+          for f in \
+            "${PKG_NAME}/root/usr/libexec/tailscale-next-update" \
+            "${PKG_NAME}/root/etc/init.d/tailscale-next" \
+            "${PKG_NAME}/root/etc/uci-defaults/99_luci-tailscale-next"
+          do
+            test -x "$f" || { echo "ERROR: missing executable bit: $f" >&2; exit 1; }
+          done
+
+      - name: Build in official SDK container
+        env:
+          SDK_IMAGE: ${{ matrix.image }}
+        run: |
+          cat > build-in-sdk.sh <<'EOF'
+          #!/bin/sh
+          set -eu
+          cd /builder
+
+          # the github mirror of the luci feed is more reliable from CI runners
+          sed -i 's|git\.openwrt\.org/project/luci|github.com/openwrt/luci|g' feeds.conf.default
+
+          ./scripts/feeds update base packages luci
+
+          # install ONLY what our Makefile depends on; `feeds install -a`
+          # symlinks ~4000 packages and the merged Config.in trips Kconfig
+          # resolution (observed: foreign deps, 3h+ derailment)
+          ./scripts/feeds install luci-base kmod-tun
+
+          # our package from the mounted checkout
+          mv ./work/${PKG_NAME} ./package/${PKG_NAME}
+
+          # append selections to the shipped .config; language list derived
+          # from po/ (minus templates) - adding a language is enough for CI
+          # to build its i18n package
+          {
+            echo "CONFIG_PACKAGE_${PKG_NAME}=m"
+            for d in ./package/${PKG_NAME}/po/*; do
+              lang=${d##*/}
+              [ -d "$d" ] || continue
+              [ "$lang" = templates ] && continue
+              echo "CONFIG_LUCI_LANG_${lang}=y"
+              echo "CONFIG_PACKAGE_luci-i18n-tailscale-next-$(echo "$lang" | tr 'A-Z_' 'a-z-')=m"
+            done
+          } >> .config
+
+          make defconfig
+          make package/${PKG_NAME}/compile V=s -j"$(nproc)"
+
+          n=$(find bin/packages -type f -name '*tailscale-next*' | wc -l)
+          echo "built $n package files (expected exactly $EXPECTED: 1 app + languages)"
+          [ "$n" -eq "$EXPECTED" ] \
+            || { echo "ERROR: expected exactly $EXPECTED artifacts, got $n" >&2; exit 1; }
+          EOF
+          docker pull "$SDK_IMAGE"
+          docker run --rm -u root \
+            -e PKG_NAME="${PKG_NAME}" \
+            -e EXPECTED="${EXPECTED}" \
+            -v "$GITHUB_WORKSPACE:/builder/work" \
+            -v "$GITHUB_WORKSPACE/bin:/builder/bin" \
+            "$SDK_IMAGE" \
+            /bin/sh /builder/work/build-in-sdk.sh
+
+      - name: Upload ${{ matrix.fmt }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ env.PKG_NAME }}-${{ env.PKGVER }}-${{ matrix.fmt }}
+          path: bin/packages/**/*tailscale-next*.${{ matrix.fmt }}
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: build
+    permissions:
+      contents: write
+    # artifacts only for manual runs; tagged builds also get a Release
+    if: startsWith(github.ref, 'refs/tags/v')
+    steps:
+      # checkout FIRST: it cleans the workspace, so it must not run after
+      # artifacts are downloaded (it would delete the artifacts/ directory)
+      - name: Checkout (signing key + script)
+        uses: actions/checkout@v5
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v8
+        with:
+          pattern: ${{ env.PKG_NAME }}-*
+          merge-multiple: true
+          path: artifacts
+
+      - name: Publish uncompressed binaries (low-RAM devices)
+        run: |
+          # derive decompressed variants of the UPX-packed binaries: devices
+          # with enough flash install these (no per-invocation decompress);
+          # the updater picks per device by free space. Per-arch failures
+          # tolerated (that arch gets no variant)
+          mkdir -p vanilla-assets
+          sudo apt-get update -qq >/dev/null 2>&1 || true
+          sudo apt-get install -y -qq upx-ucl >/dev/null 2>&1 || true
+          if ! command -v upx >/dev/null 2>&1; then
+            echo "upx unavailable - skipping vanilla assets"
+          else
+            for arch in 386 amd64 arm arm64 mips mips64 mips64le mipsle; do
+              a="tailscaled-linux-$arch"
+              curl -fsSL "https://github.com/CH3NGYZ/small-tailscale-openwrt/releases/latest/download/$a" -o "vanilla-assets/$a" 2>/dev/null \
+                || { echo "skip $arch (download failed)"; continue; }
+              # naming: clean name = plain binary (packed originals live on
+              # the fork's release)
+              upx -d "vanilla-assets/$a" >/dev/null 2>&1 \
+                || { echo "skip $arch (upx -d failed)"; rm -f "vanilla-assets/$a"; continue; }
+            done
+            curl -fsSL "https://github.com/CH3NGYZ/small-tailscale-openwrt/releases/latest/download/version.txt" \
+              -o vanilla-assets/version-vanilla.txt 2>/dev/null || rm -rf vanilla-assets
+            if [ -d vanilla-assets ]; then
+              ( cd vanilla-assets && sha256sum -- tailscaled-linux-* > SHA256SUMS-vanilla.txt )
+            fi
+          fi
+
+      - name: Create release with packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TSN_KEY_BUILD: ${{ secrets.TSN_KEY_BUILD }}
+          # PKGVER/EXPECTED come from the build job: GITHUB_ENV does not
+          # survive across jobs
+          PKGVER: ${{ needs.build.outputs.pkgver }}
+          EXPECTED: ${{ needs.build.outputs.expected }}
+        run: |
+          shopt -s nullglob
+          vanilla_assets=(vanilla-assets/*)
+          # upload-artifact roots the zip at the search dir (bin/packages),
+          # so package files arrive under an <arch>/ subdir; flatten first
+          find artifacts -mindepth 2 -type f -exec mv -f {} artifacts/ \;
+          find artifacts -mindepth 1 -type d -empty -delete
+          # published public key = the copy committed to the repo (stable
+          # across releases); installer scripts ship as release assets too
+          # (carbon-style: sh install-tailscale-next.sh on the device)
+          cp keys/tailscale-next.pem artifacts/tailscale-next.pem
+          cp scripts/install-tailscale-next.sh scripts/uninstall-tailscale-next.sh artifacts/
+
+          # sign the .apk files: the 25.12 buildroot cannot sign packages, so
+          # sign them here with `apk adbsign` inside an alpine container and
+          # verify against keys/tailscale-next.pem only - a mismatched
+          # TSN_KEY_BUILD secret fails the release instead of shipping
+          # untrusted packages. Checksums are computed AFTER signing.
+          if [ -z "$TSN_KEY_BUILD" ]; then
+            echo "::error::Set the TSN_KEY_BUILD repository secret (EC P-256 private key, SEC1 PEM) to sign the .apk release files"
+            exit 1
+          fi
+          umask 077
+          key_dir=$(mktemp -d "$RUNNER_TEMP/tsn-signing.XXXXXX")
+          trap 'rm -rf "$key_dir"' EXIT
+          printf '%s\n' "$TSN_KEY_BUILD" | tr -d '\r' > "$key_dir/private.pem"
+          unset TSN_KEY_BUILD
+          docker run --rm --network none \
+            --mount "type=bind,source=$GITHUB_WORKSPACE,target=/work" \
+            --mount "type=bind,source=$key_dir,target=/signing,readonly" \
+            --workdir /work \
+            alpine:3.23@sha256:469c9ea410b9215eaee7976ba6c0639039b444be8e5d638f7abbada189971eb2 \
+            sh scripts/sign-apk.sh /signing/private.pem keys/tailscale-next.pem artifacts/*.apk
+
+          (cd artifacts && sha256sum -- *.ipk *.apk *.pem *.sh > SHA256SUMS)
+          mapfile -t assets < <(find artifacts -type f | sort)
+          # 2 formats x (1 app + N i18n), plus SHA256SUMS, the signing
+          # public key and the two installer scripts
+          echo "release assets: ${#assets[@]}"
+          test "${#assets[@]}" -eq $((2 * EXPECTED + 4)) \
+            || { echo "ERROR: expected exactly $((2 * EXPECTED + 4)) assets, got ${#assets[@]}" >&2; exit 1; }
+          NOTES="Packages built by CI for version ${PKGVER}.
+
+          - install-tailscale-next.sh: one-line installer over SSH (sh install-tailscale-next.sh); uninstall-tailscale-next.sh removes the app
+          - *.ipk: OpenWrt 21.02 - 24.10 and iStoreOS (opkg install luci-app-tailscale-next_*.ipk)
+          - *.apk: OpenWrt 25.12+ - packages are SIGNED. Trust our public key once, then installs work via SSH and the LuCI web page with no --allow-untrusted:
+              1. download tailscale-next.pem (the same key every release; it is committed in the repo at keys/tailscale-next.pem)
+              2. add it on the device - LuCI: System -> Software -> Configuration (Keys), or SSH: cp tailscale-next.pem /etc/apk/keys/tailscale-next.pem
+              3. install the .apk - LuCI: System -> Software -> Upload Package, or SSH: apk add ./luci-app-tailscale-next-*.apk
+
+          Each format contains the luci-app package plus one i18n package per
+          language in po/. SHA256SUMS holds checksums for all files."
+          gh release create "$GITHUB_REF_NAME" "${assets[@]}" "${vanilla_assets[@]}" \
+            --title "openwrt-tailscale-next ${GITHUB_REF_NAME}" \
+            --notes "$NOTES" \
+            --verify-tag

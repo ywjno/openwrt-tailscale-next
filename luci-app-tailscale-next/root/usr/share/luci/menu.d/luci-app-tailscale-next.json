@@ -1,0 +1,13 @@
+{
+	"admin/services/tailscale-next": {
+		"title": "Tailscale Next",
+		"order": 90,
+		"action": {
+			"type": "view",
+			"path": "tailscale-next"
+		},
+		"depends": {
+			"acl": [ "luci-app-tailscale-next" ]
+		}
+	}
+}

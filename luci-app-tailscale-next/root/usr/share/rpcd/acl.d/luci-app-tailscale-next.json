@@ -1,0 +1,31 @@
+{
+	"luci-app-tailscale-next": {
+		"description": "Grant access to tailscale-next (config, updater, status)",
+		"read": {
+			"uci": [ "tailscale-next", "network" ],
+			"file": {
+				"/usr/libexec/tailscale-next-update": [ "list" ],
+				"/usr/sbin/tailscale": [ "list" ],
+				"/etc/init.d/tailscale-next": [ "list" ],
+				"/proc/meminfo": [ "read" ],
+				"/etc/tailscale/.update-backup": [ "list" ],
+				"/tmp/tailscale-next-update.log": [ "read" ],
+				"/tmp/tailscale-next-update.rc": [ "read" ],
+				"/tmp/tailscale-next-update.status": [ "read" ]
+			}
+		},
+		"write": {
+			"uci": [ "tailscale-next" ],
+			"file": {
+				"/usr/libexec/tailscale-next-update": [ "exec" ],
+				"/usr/sbin/tailscale": [ "exec" ],
+				"/etc/init.d/tailscale-next": [ "exec" ],
+				"/bin/df": [ "exec" ],
+				"/tmp/tailscale-next-update.log": [ "write" ],
+				"/tmp/tailscale-next-update.rc": [ "write" ],
+				"/tmp/tailscale-next-update.status": [ "write" ],
+				"/tmp/tailscale-next-login.request": [ "write" ]
+			}
+		}
+	}
+}

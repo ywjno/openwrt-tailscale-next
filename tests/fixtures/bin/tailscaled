@@ -1,0 +1,3 @@
+#!/bin/sh
+# Fake tailscaled daemon (fixture): accepts anything, does nothing.
+exit 0

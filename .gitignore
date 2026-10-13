@@ -1,0 +1,5 @@
+dist/
+*.ipk
+tests/tmp/
+.DS_Store
+ref/

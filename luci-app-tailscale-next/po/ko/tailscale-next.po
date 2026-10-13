@@ -1,0 +1,251 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-tailscale-next\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "(waiting for log...)"
+msgstr "(로그 대기 중...)"
+
+msgid "Accept subnet routes"
+msgstr "서브넷 라우트 수락"
+
+msgid "Advertise as exit node"
+msgstr "종료 노드로 공개"
+
+msgid "Advertise routes"
+msgstr "라우트 광고"
+
+msgid "Advertise routes must be a comma-separated list of IP subnets (e.g. 10.0.0.0/24)"
+msgstr "공개 경로는 쉼표로 구분된 IP 서브넷 목록이어야 합니다(예: 10.0.0.0/24)"
+
+msgid "Allow LAN access while using an exit node"
+msgstr "종료 노드 사용 중에도 LAN 접근 허용"
+
+msgid "Architecture"
+msgstr "아키텍처"
+
+msgid "Auth key"
+msgstr "인증 키"
+
+msgid "Auth key, leave empty to disable"
+msgstr "인증 키, 비워 두면 비활성화"
+
+msgid "Authenticate"
+msgstr "인증"
+
+msgid "Auto update"
+msgstr "자동 업데이트"
+
+msgid "Backups to keep"
+msgstr "유지할 백업 수"
+
+msgid "Bound user"
+msgstr "바인딩된 사용자"
+
+msgid "Check for and install updates automatically every day at 04:30"
+msgstr "매일 04:30에 업데이트를 자동으로 확인하고 설치"
+
+msgid "Check for updates"
+msgstr "업데이트 확인"
+
+msgid "Check for updates whenever this page is loaded."
+msgstr "이 페이지가 로드될 때마다 업데이트를 확인합니다."
+
+msgid "Check timed out, please try again"
+msgstr "확인 시간이 초과되었습니다. 다시 시도해 주세요"
+
+msgid "Checking for updates..."
+msgstr "업데이트 확인 중..."
+
+msgid "Custom Server"
+msgstr "사용자 지정 서버"
+
+msgid "Device requirements"
+msgstr "장치 요구 사항"
+
+msgid "Enable"
+msgstr "활성화"
+
+msgid "Enable "Check for updates" above to check automatically."
+msgstr "위의 '업데이트 확인'에 체크하면 페이지를 열 때 자동으로 확인합니다."
+
+msgid "Exit node name or IP; leave empty to disable"
+msgstr "종료 노드 이름 또는 IP, 비우면 비활성화"
+
+msgid "Exit node that routes traffic for this device (name or IP; leave empty to disable)."
+msgstr "이 장치의 트래픽을 처리할 종료 노드(이름 또는 IP, 비우면 비활성화)."
+
+msgid "Failed to read status: %s"
+msgstr "상태를 읽지 못했습니다: %s"
+
+msgid "For details see"
+msgstr "자세한 내용은"
+
+msgid "Global Settings"
+msgstr "전역 설정"
+
+msgid "Headscale server URL, leave empty to disable"
+msgstr "Headscale 서버 URL, 비워 두면 비활성화"
+
+msgid "Hostname"
+msgstr "호스트명"
+
+msgid "IP addresses, comma separated"
+msgstr "IP 주소, 쉼표로 구분"
+
+msgid "Installed version"
+msgstr "설치된 버전"
+
+msgid "Latest version"
+msgstr "최신 버전"
+
+msgid "Leave empty to use the device hostname"
+msgstr "비워 두면 장치 호스트명 사용"
+
+msgid "Let other tailnet devices route their internet traffic through this router; approve the exit node in the Tailscale admin console."
+msgstr "다른 tailnet 장치의 인터넷 트래픽이 이 라우터를 경유하도록 합니다. Tailscale 관리 콘솔에서 종료 노드를 승인해야 합니다."
+
+msgid "Loading status..."
+msgstr "상태 로드 중..."
+
+msgid "Log"
+msgstr "로그"
+
+msgid "Log out and unbind"
+msgstr "로그아웃 및 바인딩 해제"
+
+msgid "Log out and unbind the current device?"
+msgstr "로그아웃하고 현재 장치의 바인딩을 해제하시겠습니까?"
+
+msgid "Login"
+msgstr "로그인"
+
+msgid "Low"
+msgstr "낮음"
+
+msgid "Memory"
+msgstr "메모리"
+
+msgid "No backup available on this device."
+msgstr "이 장치에 사용 가능한 백업이 없습니다."
+
+msgid "No log output yet. Start response: %s"
+msgstr "아직 로그 출력이 없습니다. 시작 응답: %s"
+
+msgid "Node"
+msgstr "노드"
+
+msgid "Not running"
+msgstr "실행 중이 아님"
+
+msgid "Number of update backups kept on this device (0 disables backups)."
+msgstr "이 장치에 유지되는 업데이트 백업 수(0이면 백업하지 않음)."
+
+msgid "One click replaces the tailscale/tailscaled binaries with the latest upstream release; init scripts, UCI config and login state are preserved."
+msgstr "한 번의 클릭으로 tailscale/tailscaled 바이너리를 최신 업스트림 릴리스로 교체합니다. init 스크립트, UCI 설정, 로그인 상태는 그대로 유지됩니다."
+
+msgid "Requirements: RAM 128 MB minimum (256 MB recommended), 10 MB free on /overlay (37 MB with update backups), 30 MB free on /tmp for automatic updates."
+msgstr "요구 사항: RAM 128 MB 이상(256 MB 권장), /overlay에 10 MB 이상 여유(업데이트 백업 시 37 MB), 자동 업데이트를 위해 /tmp에 30 MB 이상 여유."
+
+msgid "Roll back"
+msgstr "롤백"
+
+msgid "Roll back to the last backed-up Tailscale version?"
+msgstr "마지막으로 백업된 Tailscale 버전으로 롤백하시겠습니까?"
+
+msgid "Save failed: %s"
+msgstr "저장 실패: %s"
+
+msgid "Server URL"
+msgstr "서버 URL"
+
+msgid "Server URL must start with http:// or https://"
+msgstr "서버 URL은 http:// 또는 https://로 시작해야 합니다"
+
+msgid "Start login"
+msgstr "로그인 시작"
+
+msgid "State"
+msgstr "상태"
+
+msgid "Status"
+msgstr "상태"
+
+msgid "Storage (/)"
+msgstr "스토리지 (/)"
+
+msgid "Storage (/tmp)"
+msgstr "스토리지 (/tmp)"
+
+msgid "Subnets allowed to be accessed: "
+msgstr "접근을 허용할 서브넷: "
+
+msgid "Tailscale"
+msgstr "Tailscale"
+
+msgid "Tailscale Update"
+msgstr "Tailscale 업데이트"
+
+msgid "Tailscale connects your devices for easy access to remote resources."
+msgstr "Tailscale은 원격 리소스에 쉽게 접근할 수 있도록 장치를 연결합니다."
+
+msgid "Tailscale update completed."
+msgstr "Tailscale 업데이트가 완료되었습니다."
+
+msgid "The update seems stuck, see the log below."
+msgstr "업데이트가 멈춘 것 같습니다. 아래 로그를 확인하세요."
+
+msgid "Too low"
+msgstr "너무 낮음"
+
+msgid "Up to date"
+msgstr "최신 상태"
+
+msgid "Update Settings"
+msgstr "업데이트 설정"
+
+msgid "Update available"
+msgstr "업데이트 가능"
+
+msgid "Update failed, see the log below."
+msgstr "업데이트 실패, 아래 로그를 확인하세요."
+msgid "Update failed, see the log below."
+msgstr "업데이트 실패, 아래 로그를 확인하세요."
+
+msgid "Update skipped: another update is already running."
+msgstr "업데이트 건너뜀: 다른 업데이트가 이미 실행 중입니다."
+
+msgid "Update started, reading progress..."
+msgstr "업데이트가 시작되었습니다. 진행 상황을 읽는 중..."
+
+msgid "Update to latest now"
+msgstr "지금 최신 버전으로 업데이트"
+
+msgid "Use"
+msgstr "사용"
+
+msgid "Use exit node"
+msgstr "종료 노드 사용"
+
+msgid "e.g. OpenWrt"
+msgstr "예: OpenWrt"
+
+msgid "free"
+msgstr "여유"
+
+msgid "no output"
+msgstr "출력 없음"
+
+msgid "not installed"
+msgstr "설치되지 않음"
+
+msgid "ok"
+msgstr "OK"
+
+msgid "tailscale-next config section not found"
+msgstr "tailscale-next 구성 섹션을 찾을 수 없음"
+
+msgid "to deploy a private server"
+msgstr "로 프라이빗 서버 구축"
+

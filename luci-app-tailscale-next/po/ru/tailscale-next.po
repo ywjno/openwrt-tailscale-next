@@ -1,0 +1,251 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: luci-app-tailscale-next\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+msgid "(waiting for log...)"
+msgstr "(ожидание журнала...)"
+
+msgid "Accept subnet routes"
+msgstr "Принимать маршруты подсетей"
+
+msgid "Advertise as exit node"
+msgstr "Объявить выходным узлом"
+
+msgid "Advertise routes"
+msgstr "Анонсировать маршруты"
+
+msgid "Advertise routes must be a comma-separated list of IP subnets (e.g. 10.0.0.0/24)"
+msgstr "Объявляемые маршруты должны быть списком IP-подсетей, разделённых запятыми (напр., 10.0.0.0/24)"
+
+msgid "Allow LAN access while using an exit node"
+msgstr "Разрешить доступ к LAN при использовании выходного узла"
+
+msgid "Architecture"
+msgstr "Архитектура"
+
+msgid "Auth key"
+msgstr "Ключ авторизации"
+
+msgid "Auth key, leave empty to disable"
+msgstr "Ключ авторизации, оставьте пустым для отключения"
+
+msgid "Authenticate"
+msgstr "Аутентификация"
+
+msgid "Auto update"
+msgstr "Автообновление"
+
+msgid "Backups to keep"
+msgstr "Хранить резервных копий"
+
+msgid "Bound user"
+msgstr "Привязанный пользователь"
+
+msgid "Check for and install updates automatically every day at 04:30"
+msgstr "Автоматически проверять и устанавливать обновления каждый день в 04:30"
+
+msgid "Check for updates"
+msgstr "Проверить обновления"
+
+msgid "Check for updates whenever this page is loaded."
+msgstr "Проверять обновления при каждой загрузке этой страницы."
+
+msgid "Check timed out, please try again"
+msgstr "Время проверки истекло, попробуйте снова"
+
+msgid "Checking for updates..."
+msgstr "Проверка обновлений..."
+
+msgid "Custom Server"
+msgstr "Свой сервер"
+
+msgid "Device requirements"
+msgstr "Требования к устройству"
+
+msgid "Enable"
+msgstr "Включить"
+
+msgid "Enable "Check for updates" above to check automatically."
+msgstr "Включите «Проверять обновления» (выше) — будет автоматическая проверка при открытии страницы."
+
+msgid "Exit node name or IP; leave empty to disable"
+msgstr "Имя или IP выходного узла; оставьте пустым для отключения"
+
+msgid "Exit node that routes traffic for this device (name or IP; leave empty to disable)."
+msgstr "Выходной узел, через который идёт трафик этого устройства (имя или IP; пусто — отключено)."
+
+msgid "Failed to read status: %s"
+msgstr "Не удалось прочитать состояние: %s"
+
+msgid "For details see"
+msgstr "Подробности на"
+
+msgid "Global Settings"
+msgstr "Глобальные настройки"
+
+msgid "Headscale server URL, leave empty to disable"
+msgstr "URL сервера Headscale, оставьте пустым для отключения"
+
+msgid "Hostname"
+msgstr "Имя хоста"
+
+msgid "IP addresses, comma separated"
+msgstr "IP-адреса через запятую"
+
+msgid "Installed version"
+msgstr "Установленная версия"
+
+msgid "Latest version"
+msgstr "Последняя версия"
+
+msgid "Leave empty to use the device hostname"
+msgstr "Оставьте пустым, чтобы использовать имя устройства"
+
+msgid "Let other tailnet devices route their internet traffic through this router; approve the exit node in the Tailscale admin console."
+msgstr "Разрешить другим устройствам tailnet направлять интернет-трафик через этот роутер; подтвердите выходной узел в консоли администратора Tailscale."
+
+msgid "Loading status..."
+msgstr "Загрузка состояния..."
+
+msgid "Log"
+msgstr "Журнал"
+
+msgid "Log out and unbind"
+msgstr "Выйти и отвязать"
+
+msgid "Log out and unbind the current device?"
+msgstr "Выйти и отвязать это устройство?"
+
+msgid "Login"
+msgstr "Вход"
+
+msgid "Low"
+msgstr "Мало"
+
+msgid "Memory"
+msgstr "Память"
+
+msgid "No backup available on this device."
+msgstr "На этом устройстве нет доступных резервных копий."
+
+msgid "No log output yet. Start response: %s"
+msgstr "Вывод журнала пока отсутствует. Ответ запуска: %s"
+
+msgid "Node"
+msgstr "Узел"
+
+msgid "Not running"
+msgstr "Не запущен"
+
+msgid "Number of update backups kept on this device (0 disables backups)."
+msgstr "Количество хранимых на устройстве резервных копий обновлений (0 — отключить)."
+
+msgid "One click replaces the tailscale/tailscaled binaries with the latest upstream release; init scripts, UCI config and login state are preserved."
+msgstr "Одним кликом бинарные файлы tailscale/tailscaled заменяются на последний релиз апстрима; скрипты init, конфигурация UCI и состояние входа сохраняются."
+
+msgid "Requirements: RAM 128 MB minimum (256 MB recommended), 10 MB free on /overlay (37 MB with update backups), 30 MB free on /tmp for automatic updates."
+msgstr "Требования: не менее 128 МБ ОЗУ (рекомендуется 256 МБ), не менее 10 МБ свободно на /overlay (37 МБ с резервными копиями обновлений), не менее 30 МБ свободно на /tmp для автоматических обновлений."
+
+msgid "Roll back"
+msgstr "Откатить"
+
+msgid "Roll back to the last backed-up Tailscale version?"
+msgstr "Откатиться к последней сохранённой версии Tailscale?"
+
+msgid "Save failed: %s"
+msgstr "Ошибка сохранения: %s"
+
+msgid "Server URL"
+msgstr "URL сервера"
+
+msgid "Server URL must start with http:// or https://"
+msgstr "URL сервера должен начинаться с http:// или https://"
+
+msgid "Start login"
+msgstr "Начать вход"
+
+msgid "State"
+msgstr "Состояние"
+
+msgid "Status"
+msgstr "Состояние"
+
+msgid "Storage (/)"
+msgstr "Хранилище (/)"
+
+msgid "Storage (/tmp)"
+msgstr "Хранилище (/tmp)"
+
+msgid "Subnets allowed to be accessed: "
+msgstr "Разрешённые подсети: "
+
+msgid "Tailscale"
+msgstr "Tailscale"
+
+msgid "Tailscale Update"
+msgstr "Обновление Tailscale"
+
+msgid "Tailscale connects your devices for easy access to remote resources."
+msgstr "Tailscale соединяет ваши устройства для простого доступа к удалённым ресурсам."
+
+msgid "Tailscale update completed."
+msgstr "Обновление Tailscale завершено."
+
+msgid "The update seems stuck, see the log below."
+msgstr "Похоже, обновление зависло, см. журнал ниже."
+
+msgid "Too low"
+msgstr "Слишком мало"
+
+msgid "Up to date"
+msgstr "Актуальна"
+
+msgid "Update Settings"
+msgstr "Настройки обновления"
+
+msgid "Update available"
+msgstr "Доступно обновление"
+
+msgid "Update failed, see the log below."
+msgstr "Ошибка обновления, см. журнал ниже."
+msgid "Update failed, see the log below."
+msgstr "Ошибка обновления, см. журнал ниже."
+
+msgid "Update skipped: another update is already running."
+msgstr "Обновление пропущено: другое обновление уже выполняется."
+
+msgid "Update started, reading progress..."
+msgstr "Обновление начато, чтение прогресса..."
+
+msgid "Update to latest now"
+msgstr "Обновить до последней версии сейчас"
+
+msgid "Use"
+msgstr "Используйте"
+
+msgid "Use exit node"
+msgstr "Использовать выходной узел"
+
+msgid "e.g. OpenWrt"
+msgstr "напр. OpenWrt"
+
+msgid "free"
+msgstr "свободно"
+
+msgid "no output"
+msgstr "нет вывода"
+
+msgid "not installed"
+msgstr "не установлен"
+
+msgid "ok"
+msgstr "ОК"
+
+msgid "tailscale-next config section not found"
+msgstr "Секция конфигурации tailscale-next не найдена"
+
+msgid "to deploy a private server"
+msgstr "для развёртывания частного сервера"
+
